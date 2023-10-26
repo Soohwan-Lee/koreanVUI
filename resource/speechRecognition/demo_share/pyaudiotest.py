@@ -18,6 +18,8 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 48000
 
+file_path = './resource/speechRecognition/demo_share/'
+
 p = pyaudio.PyAudio()
 
 stream = p.open(format=FORMAT,
@@ -39,21 +41,21 @@ print('record stopped')
 stream.stop_stream()
 stream.close()
 p.terminate()
-wf = wave.open("realtime_input.wav",'wb')
+wf = wave.open(file_path + "realtime_input.wav",'wb')
 wf.setnchannels(CHANNELS)
 wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
 wf.setframerate(RATE)
 wf.writeframes(b''.join(frames))
 wf.close()
 
-wav_file = "realtime_input.wav"
+wav_file = file_path + "realtime_input.wav"
 
 start_time = time.time()  # 시간 측정 시작
 
-model_path = './resource/speechRecognition/demo_share/model.pt'
+model_path = file_path + 'model.pt'
 device = 'cpu'
 model = torch.load(model_path, map_location=lambda storage, loc: storage).to(device)
-vocab = KsponSpeechVocabulary('./resource/speechRecognition/demo_share/cssiri_character_vocabs.csv')
+vocab = KsponSpeechVocabulary(file_path + 'cssiri_character_vocabs.csv')
 transforms = FilterBank(48000, 80, 20, 10)
 
 start_time_2 = time.time()  # 시간 측정 시작
