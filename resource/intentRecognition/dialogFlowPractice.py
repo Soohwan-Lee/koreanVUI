@@ -1,7 +1,7 @@
 import os
 import google.cloud.dialogflow_v2 as dialogflow
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = 'lemme2-hvvh-93b9c4459fd3.json'   #Private Key
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = './lemme2-hvvh-93b9c4459fd3.json'   #Private Key
 DIALOGFLOW_PROJECT_ID = 'lemme2-hvvh'   #Project ID
 DIALOGFLOW_LANGUAGE_CODE = 'ko'
 SESSION_ID = 'me'
@@ -21,6 +21,3 @@ while True:
     print("Our text:", response.query_result.query_text)
     print("Dialogflow's response:", response.query_result.fulfillment_text)
     print("Dialogflow's intent:", response.query_result.intent.display_name)
-
-
-ㄴ
