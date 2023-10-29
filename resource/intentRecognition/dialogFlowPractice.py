@@ -1,7 +1,8 @@
 import os
 import google.cloud.dialogflow_v2 as dialogflow
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = './lemme2-hvvh-93b9c4459fd3.json'   #Private Key
+file_path = './resource/intentRecognition/'
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = file_path + 'lemme2-hvvh-93b9c4459fd3.json'   #Private Key
 DIALOGFLOW_PROJECT_ID = 'lemme2-hvvh'   #Project ID
 DIALOGFLOW_LANGUAGE_CODE = 'ko'
 SESSION_ID = 'me'
