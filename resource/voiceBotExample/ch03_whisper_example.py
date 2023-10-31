@@ -63,7 +63,7 @@ elapsed_time_2 = start_time_3 - start_time_2
 entire_time = start_time_3 - start_time
 
 #결과 보기
-print("Whipser가 인식한 음성: " + transcript["text"])
+print("Whisper가 인식한 음성: " + transcript["text"])
 print(f"음성 불러오기: {elapsed_time:.3f} 초\nWhisper 결과 불러오기: {elapsed_time_2:.3f} 초\n전체 소요시간: {entire_time:.3f} 초")
 with wave.open(wav_file, 'rb') as wf:
     print(f"음성 길이: {wf.getnframes()/wf.getframerate()} 초, 음성 크기: {os.path.getsize(wav_file)/1000} kB\n")
