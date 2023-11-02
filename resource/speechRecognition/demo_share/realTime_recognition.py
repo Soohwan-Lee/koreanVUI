@@ -25,11 +25,15 @@ CHUNK = int(RATE / 10)
 BUFF = CHUNK * 10
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
-DEVICE = 1
+DEVICE = 0
 
 # 무음 감지를 위한 상수 값
 SILENCE_THREASHOLD = 2500
 SILENCE_SECONDS = 2
+
+# 파일 경로 설정
+file_path = './resource/speechRecognition/demo_share/'
+
 
 # 음성 인식 모델을 사용하는 함수 (주석 처리)
 def speech_recognition(signal):
@@ -37,10 +41,10 @@ def speech_recognition(signal):
 
     start = time.time() # 시간 측정
 
-    model_path = 'model.pt'
+    model_path = file_path + 'model.pt'
     device = 'cpu' # 'cuda'
     model = torch.load(model_path, map_location=lambda storage, loc: storage).to(device)
-    vocab = KsponSpeechVocabulary('cssiri_character_vocabs.csv')
+    vocab = KsponSpeechVocabulary(file_path + 'cssiri_character_vocabs.csv')
     transforms = FilterBank(48000, 80, 20, 10)
 
     time1 = time.time() # 시간 측정
@@ -61,7 +65,7 @@ def speech_recognition(signal):
         sentence = vocab.label_to_string(y_hats.cpu().detach().numpy())[0]
         end = time.time() # 시간 측정
         print(f"\n인식된 텍스트: {sentence}") 
-        print(f"환경: {device}\n모델 불러오기: {time1-start} 초\n음성인식: {time2-time1:.3f} 초\n후처리: {end-time2:.3f} 초")
+        print(f"환경: {device}\n모델 불러오기: {time1-start:.3f} 초\n음성 인식: {time2-time1:.3f} 초\n후처리: {end-time2:.3f} 초")
         print("===========================================")
 
 def main():

@@ -44,7 +44,7 @@ wav_file = file_path + "realtime_input.wav"
 
 ### OpenAI STT
 #API 키 입력
-openai.api_key = "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"
+openai.api_key = "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"
 
 start_time = time.time()  # 시간 측정 시작
 
@@ -64,6 +64,6 @@ entire_time = start_time_3 - start_time
 
 #결과 보기
 print("Whisper가 인식한 음성: " + transcript["text"])
-print(f"음성 불러오기: {elapsed_time:.3f} 초\nWhisper 결과 불러오기: {elapsed_time_2:.3f} 초\n전체 소요시간: {entire_time:.3f} 초")
+print(f"Whisper 결과 불러오기: {elapsed_time_2:.3f} 초\n전체 소요시간: {entire_time:.3f} 초")   #음성 불러오기: {elapsed_time:.3f} 초\n
 with wave.open(wav_file, 'rb') as wf:
     print(f"음성 길이: {wf.getnframes()/wf.getframerate()} 초, 음성 크기: {os.path.getsize(wav_file)/1000} kB\n")

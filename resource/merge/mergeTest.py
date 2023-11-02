@@ -90,10 +90,11 @@ while True:
         model = model.module
     model.eval()
 
-    start_time_4 = time.time()  # 시간 측정 시작
+
 
     if isinstance(model, DeepSpeech2):
         y_hats = model.recognize(feature.unsqueeze(0), input_length)
+        start_time_4 = time.time()  # 시간 측정 시작
         sentence = vocab.label_to_string(y_hats.cpu().detach().numpy())[0]
     
     our_input = dialogflow.types.TextInput(text=sentence, language_code=DIALOGFLOW_LANGUAGE_CODE)
