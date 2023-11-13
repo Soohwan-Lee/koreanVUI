@@ -20,12 +20,13 @@ from kospeech.data.audio.parser import load_audio
 import time  # 시간 측정을 위한 모듈 추가
 
 # const values for mic streaming
-RATE = 48000
+# RATE = 48000
+RATE = 44100
 CHUNK = int(RATE / 10)
 BUFF = CHUNK * 10
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
-DEVICE = 0
+DEVICE = 1
 
 # 무음 감지를 위한 상수 값
 SILENCE_THREASHOLD = 2500
@@ -125,7 +126,7 @@ def listen(q):
 
                     # 상태가 수신 중이면 볼륨 값을 확인
                     if not is_started:
-                        # print(vol)
+                        print(array('h', data))
                         if vol >= SILENCE_THREASHOLD:
                             print('** start of speech detected')
                             is_started = True

@@ -4,9 +4,10 @@ import json
 import re
 import openai
 import os
+import time
 
 # API 키 설정
-openai.api_key = "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"
+openai.api_key = "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"
 
 def get_current_weather(location, unit="섭씨"):
     
@@ -81,6 +82,7 @@ def run_conversation(user_query):
             }
         }        
     ]
+    startTime = time.time()
     # 1단계: 사용자 입력과 함수 정보를 Chat Completions API 모델로 보내기    
     response = openai.ChatCompletion.create( # Chat Completions API 모델로 보내기
             model="gpt-3.5-turbo",
@@ -89,13 +91,15 @@ def run_conversation(user_query):
             functions=functions,
             function_call="auto"
     )
+
+    time2 = time.time()
     # 2단계: 응답 생성
     response_message = response["choices"][0]["message"] # 모델의 응답 메시지
 
     print("[ChatGPT Completion API 함수 호출 결과]\n", response_message)
 
-    
     if response_message.get("function_call"): # 응답이 함수 호출인지 확인하기
+        time3 = time.time()
         # 3단계: JSON 객체를 분석해 함수 이름과 인수를 추출한 후에 함수 호출
         # (주의: JSON 응답이 항상 유효하지 않을 수 있음)
         
@@ -121,6 +125,7 @@ def run_conversation(user_query):
         print("=======================================")
         print("[호출한 날씨 API 함수의 응답 결과]\n", function_response)
         
+        time4 = time.time()
         # 4단계: 함수 호출 결과를 기존 메시지에 추가하고,
         #        Chat Completions API 모델로 보내 응답받기
 
@@ -138,18 +143,38 @@ def run_conversation(user_query):
             model="gpt-3.5-turbo",
             # model="gpt-4",
             messages=messages,
-        ) 
+        )
+        endTime = time.time()
+
+        elapsed_time_1 = time2 - startTime
+        elapsed_time_2 = time3 - time2
+        elapsed_time_3 = time4 - time3
+        elapsed_time_4 = endTime - time4
+        entire_time = endTime - startTime
         print("=======================================")
-        print("[두 번째 응답 반환 결과]\n", second_response)
+        print(f"(1단계) 사용자 입력과 함수 정보를 Chat Completions API 모델로 보내기: {elapsed_time_1:.3f} 초")
+        print(f"(2단계) 응답 생성: {elapsed_time_2:.3f} 초")
+        print(f"(3단계) JSON 객체를 분석해 함수 이름과 인수를 추출한 후에 함수 호출: {elapsed_time_3:.3f} 초")
+        print(f"(4단계) 함수 호출 결과를 기존 메시지에 추가하고, ChatGPT 최종 응답받기: {elapsed_time_4:.3f} 초")
+        print(f"전체 소요시간: {entire_time:.3f} 초")
+
+        # print("=======================================")
+        # print("[두 번째 응답 반환 결과]\n", second_response)
         return second_response # 두 번째 응답 반환
-    
+
+
     return response_message # 응답 메시지 반환
+
 
 user_query = "현재 울산의 날씨는 어떠한가요?"
 response = run_conversation(user_query)
 response_content = response["choices"][0]["message"]["content"]
 
+
+
+
 print("=======================================")
 print("[ChatGPT Completion API 함수 호출 결과]\n", response)
 print("=======================================")
 print("[최종 응답 결과]\n", response_content)
+print("=======================================")
