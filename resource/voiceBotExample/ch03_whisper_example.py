@@ -4,20 +4,23 @@ import wave
 import time
 import os
 
-CHUNK = 1024
+RATE = 44100
+CHUNK = int(RATE / 10)
+BUFF = CHUNK * 10
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
-RATE = 48000
+DEVICE = 1
 
 file_path = './resource/voiceBotExample/'
 
 p = pyaudio.PyAudio()
 
 stream = p.open(format=FORMAT,
-                channels=CHANNELS,
-                rate=RATE,
-                input=True,
-                frames_per_buffer=CHUNK)
+            channels=CHANNELS,
+            rate=RATE,
+            input=True,
+            input_device_index=DEVICE,
+            frames_per_buffer=CHUNK)
 
 print('start recording')
 
@@ -44,7 +47,7 @@ wav_file = file_path + "realtime_input.wav"
 
 ### OpenAI STT
 #API 키 입력
-openai.api_key = "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"
+openai.api_key = "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"
 
 start_time = time.time()  # 시간 측정 시작
 
@@ -54,7 +57,7 @@ audio_file = open("./resource/voiceBotExample/realtime_input.wav", "rb")
 start_time_2 = time.time()  # 시간 측정 시작
 
 # whisper 모델에 음원파일 전달하기
-transcript = openai.Audio.transcribe("whisper-1", audio_file)
+transcript = openai.audio.transcriptions.create(model="whisper-1", file=audio_file)
 
 start_time_3 = time.time()  # 시간 측정 시작
 
@@ -63,7 +66,8 @@ elapsed_time_2 = start_time_3 - start_time_2
 entire_time = start_time_3 - start_time
 
 #결과 보기
-print("Whisper가 인식한 음성: " + transcript["text"])
+print(transcript.text)
+# print("Whisper가 인식한 음성: " + transcript["text"])
 print(f"Whisper 결과 불러오기: {elapsed_time_2:.3f} 초\n전체 소요시간: {entire_time:.3f} 초")   #음성 불러오기: {elapsed_time:.3f} 초\n
 with wave.open(wav_file, 'rb') as wf:
     print(f"음성 길이: {wf.getnframes()/wf.getframerate()} 초, 음성 크기: {os.path.getsize(wav_file)/1000} kB\n")

@@ -1,7 +1,9 @@
-#######################################
-# https://ungodly-hour.tistory.com/36 #
-#######################################
+from openai import OpenAI
+from pathlib import Path
 
+import sounddevice as sd
+import soundfile as sf
+import yaml
 import pyaudio
 import numpy as np
 from array import array
@@ -19,8 +21,6 @@ from kospeech.data.audio.feature import FilterBank
 from kospeech.data.audio.parser import load_audio
 import time  # 시간 측정을 위한 모듈 추가
 
-# const values for mic streaming
-# RATE = 48000
 RATE = 44100
 CHUNK = int(RATE / 10)
 BUFF = CHUNK * 10
@@ -33,8 +33,34 @@ SILENCE_THREASHOLD = 2500
 SILENCE_SECONDS = 2
 
 # 파일 경로 설정
-file_path = './resource/speechRecognition/demo_share/'
+file_path = './resource/merge/'
 
+client = OpenAI(api_key="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")
+personality = "너는 노인들을 위한 친절한 반려 로봇이야. 공손히 대답해줘."
+messages = [{"role" : "system", "content" : f"{personality}"}]
+
+def generate_audio(text):
+    speech_file_path = Path(__file__).parent / "speech.mp3"
+    response = client.audio.speech.create(
+    model="tts-1",
+    voice="nova",
+    input=text
+    )
+    response.stream_to_file(speech_file_path)
+    audio_data,sample_rate = sf.read(speech_file_path)
+    sd.play(audio_data,sample_rate)
+    sd.wait()
+
+def generate_text():
+    response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=messages
+    )
+    print(response.choices[0].message.content)
+
+    bot_response = response.choices[0].message.content
+    messages.append({"role" : "assistant", "content" : f"{bot_response}"})
+    return bot_response
 
 # 음성 인식 모델을 사용하는 함수 (주석 처리)
 def speech_recognition(signal):
@@ -68,10 +94,9 @@ def speech_recognition(signal):
         print(f"\n인식된 텍스트: {sentence}") 
         print(f"환경: {device}\n모델 불러오기: {time1-start:.3f} 초\n음성 인식: {time2-time1:.3f} 초\n후처리: {end-time2:.3f} 초")
         print("===========================================")
+        return sentence
 
-def main():
-    q = Queue()
-    Thread(target=listen, args=(q,)).start()
+
 
 def save_audio_data(data, filename):
     wf = wave.open(filename, 'wb')
@@ -168,5 +193,13 @@ def listen(q):
         stream.close()
 
 
-if __name__ == '__main__':
+def main():
+    while True:
+        q = Queue()
+        user_input = Thread(target=listen, args=(q,)).start()
+        messages.append({"role" : "user", "content" : f"{user_input}"})
+        bot_response = generate_text()
+        generate_audio(bot_response)
+
+if __name__ == "__main__":
     main()
