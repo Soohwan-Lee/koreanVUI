@@ -3,6 +3,9 @@ from pathlib import Path
 import os
 import soundfile as sf
 import numpy as np
+import time
+from gtts import gTTS
+
 
 
 
@@ -11,7 +14,7 @@ output_folder = "audio_files"
 os.makedirs(output_folder, exist_ok=True)
 file_path = "./resource/2023Evaluation/"
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 
 
 # List of 30 strings
@@ -48,25 +51,33 @@ text_list = [
     "소리 크게"
 ]
 
+# i = 10
+# speech_file_path = Path(__file__).parent / f"{i}.mp3"    
+# response = client.audio.speech.create(
+# model="tts-1-hd",
+# voice="shimmer",
+# input=text_list[i]
+# )
+
+# response.stream_to_file(speech_file_path)
+
+# audio_data,sample_rate = sf.read(speech_file_path)
+
 # Loop through the 30 pieces of text
 for i, text in enumerate(text_list):
     # # Convert text to speech
-    # tts = gTTS(text=text, lang='en', slow=False)
+    tts = gTTS(text=text, lang='ko')
+    tts.save("./resource/2023Evaluation/" + f"{i}.wav")
 
-    # # Save the speech as an audio file in mp3 format
-    # # audio_file_path = os.path.join(output_folder, f"{i}.mp3")
-    # audio_file_path = file_path + f"{i}.mp3"
-    # tts.save(audio_file_path)
+    # speech_file_path = Path(__file__).parent / f"{i}.mp3"    
+    # response = client.audio.speech.create(
+    # model="tts-1-hd",
+    # voice="shimmer",
+    # input=text
+    # )
 
-    speech_file_path = Path(__file__).parent / f"{i}.mp3"
-    response = client.audio.speech.create(
-    model="tts-1-hd",
-    voice="shimmer",
-    input=text
-    )
+    # response.stream_to_file(speech_file_path)
 
-    response.stream_to_file(speech_file_path)
-
-    audio_data,sample_rate = sf.read(speech_file_path)
+    # audio_data,sample_rate = sf.read(speech_file_path)
 
 print("Audio files created and saved successfully.")
