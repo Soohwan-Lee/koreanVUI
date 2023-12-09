@@ -28,7 +28,7 @@ file_path = './resource/merge/'
 
 
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 personality = "너는 노인들을 위한 반려로봇 래미야. 질문에는 항상 친절하고 공손하게 대답해야 해"
 messages = [{"role" : "system", "content" : f"{personality}"}]
 
