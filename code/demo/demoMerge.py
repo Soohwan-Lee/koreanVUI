@@ -26,11 +26,11 @@ CHANNELS = 1
 DEVICE = 0
 
 # Clova Voice API Information
-client_id = "x1rso63no3"
-client_secret = "wEzXCvYmif5GrEGGzlh9rEHicUeyVDPlzc1juL5G"
+client_id = "YOUR_CLIENT_ID"
+client_secret = "YOUR_CLIENT-SECRET"
 
 # OpenAI API Information
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="YOUR-OPENAI-API-KEY")
 personality = "너는 노인들을 위한 반려로봇이고 너 이름은 '래미'야. 너는 울산과학기술원에서 만들어졌어. 노인들이 알아들을 수 있게 짧고 친절하게 응답해."
 messages = [{"role" : "system", "content" : f"{personality}"}]
 
