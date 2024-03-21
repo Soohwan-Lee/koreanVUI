@@ -2,22 +2,22 @@
 import requests
 import json
 
-# # 카카오톡 메시지 API
-# url = "https://kauth.kakao.com/oauth/token"
-# data = {
-#     "grant_type" : "authorization_code",
-#     "client_id" : "7b82d66ab24cd36577acca5e7b46671a",
-#     "redirect_url" : "https://localhost:3000",
-#     "code" : "Al0_93VEa0H2STnq9Fc3lXkuNEGZA2pSObzhw_t12GJxMRULkm4Xgel2diQKPXWbAAABjSCnQV_E017PSiBv1Q"
-# }
-# response = requests.post(url, data=data)
-# tokens = response.json()
-# print(tokens)
-# print("=============")
+# 카카오톡 메시지 API
+url = "https://kauth.kakao.com/oauth/token"
+data = {
+    "grant_type" : "authorization_code",
+    "client_id" : "751e98ad2578e3ca32804ce81e927e58",   # REST API
+    "redirect_url" : "https://localhost:3000",
+    "code" : "w_sTuRVrGFvfleSlJVBHPaTmkPi3BCdtWAThGySA2YNRycDzf9VhRx6OONIKPXKXAAABjj9ohs-2xj-RG-1vuA"
+}
+response = requests.post(url, data=data)
+tokens = response.json()
+print(tokens)
+print("=============")
 
-# # kakao_code.json 파일 저장
-# with open("./resource/kakaoTalkMessage/kakao_code.json", "w") as fp:
-#     json.dump(tokens, fp)
+# kakao_code.json 파일 저장
+with open("./resource/kakaoTalkMessage/kakao_code.json", "w") as fp:
+    json.dump(tokens, fp)
 
 # kakao_code.json - access token 다시 불러오기
 with open("./resource/kakaoTalkMessage/kakao_code.json", "r") as fp:
@@ -27,12 +27,13 @@ print(tokens["access_token"])
 ### Text 형태로 작성된 메시지를 보내는 함수
 def send_text_form():
     url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
+    # url = 'https://kapi.kakao.com/v2/api/talk/channels'
     headers = {
         "Authorization": "Bearer " + tokens["access_token"]
     }
     data = {
         "template_object" : json.dumps({ "object_type" : "text",
-                                        "text" : "[LAMMY Test Message] 현재 응급 상황이 발생하였습니다.",
+                                        "text" : "[LEMMY Test Message] 현재 응급 상황이 발생하였습니다.",
                                         "link" : {
                                                     "web_url" : "https://expc.unist.ac.kr",
                                                     "mobile_web_url" : "https://expc.unist.ac.kr"

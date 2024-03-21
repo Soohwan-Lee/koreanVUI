@@ -6,9 +6,9 @@ import json
 # url = "https://kauth.kakao.com/oauth/token"
 # data = {
 #     "grant_type" : "authorization_code",
-#     "client_id" : "7b82d66ab24cd36577acca5e7b46671a", # {REST API}
+#     "client_id" : "751e98ad2578e3ca32804ce81e927e58", # {REST API}
 #     "redirect_url" : "https://localhost:3000",
-#     "code" : "cuIOSfBE8qMi4i3PPAdiPDTkKvf0nDsJuW7eXbl3Nhhz3qwH9fu9Hd2PuasKKiWQAAABjSDIDs7-oZq-Jypvmw" # {CODE}
+#     "code" : "NC7H9EVYDnFzQlgtWV-Pf4maLJ8UyM-i8vROX0UGBL-7O1K_-NNYXkGMAIcKPXUZAAABjjpfu00p9hBbJybEWQ" # {CODE}
 # }
 # response = requests.post(url, data=data)
 # tokens = response.json()
@@ -18,20 +18,22 @@ import json
 # url = "https://kauth.kakao.com/oauth/token"
 # data = {
 #     "grant_type": "refresh_token",
-#     "client_id": "7b82d66ab24cd36577acca5e7b46671a",    # {REST API}
-#     "refresh_token": "VXxgDRJjJPQwDhThjjgQatxP40yIDlmCXmQKPXMXAAABjSDJYzVV7imzm104lw"   # {CODE}
+#     "client_id": "751e98ad2578e3ca32804ce81e927e58",    # {REST API}
+#     "refresh_token": "ODmvPhKRHlP1qA1sbBih-mkID0t12WIMFdUKKiVSAAABjjpgvGhV7imzm104lw"   # {CODE}
 # }
 # response = requests.post(url, data=data)
 # tokens = response.json()
+# print(tokens)
 
 # # kakao_code.json 파일 저장
 # with open("./resource/kakaoTalkMessage/kakao_code_friend.json", "w") as fp:
 #     json.dump(tokens, fp)
 
 
-# 카카오 API 엑세스 토큰
+# 카카오 API 엑세스 토큰 kakao_code.json 불러오기
 with open("./resource/kakaoTalkMessage/kakao_code_friend.json", "r") as fp:
     tokens = json.load(fp)    
+# print(tokens)
 print(tokens["access_token"])
 
 
@@ -54,7 +56,7 @@ def send_message():
         'receiver_uuids': '["{}"]'.format(friend_id),
         "template_object": json.dumps({
             "object_type":"text",
-            "text":"[LAMMY Test] 응급상황 발생!",
+            "text":"[LEMMY Test] 응급상황 발생!",
             "link":{
                 "web_url" : "https://expc.unist.ac.kr",
                 "mobile_web_url" : "https://expc.unist.ac.kr"

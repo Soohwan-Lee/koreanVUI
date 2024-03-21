@@ -25,8 +25,8 @@ RATE = 44100
 CHUNK = int(RATE / 10)
 BUFF = CHUNK * 10
 FORMAT = pyaudio.paInt16
-CHANNELS =1
-DEVICE = 1
+CHANNELS = 1
+DEVICE = 0
 
 # 무음 감지를 위한 상수 값
 SILENCE_THREASHOLD = 4000

@@ -35,26 +35,26 @@ DEVICE = 1
 file_path = './resource/controlIoT/'
 
 # Bulbs List (EXPC_Lab WIFI)
-livingRoomBulb = Bulb("192.168.0.17")
-bedRoomBulb = Bulb("192.168.0.18")
+livingRoomBulb = Bulb("192.168.0.42")
+bedRoomBulb = Bulb("192.168.0.43")
 
 # Function Turn on the light
 def turn_on_light(location):
     if location == "거실":
-        placeBulb = livingRoomBulb
+        livingRoomBulb.turn_on()
     elif location == "침실":
-        placeBulb = bedRoomBulb
+        bedRoomBulb.turn_on()
 
-    placeBulb.turn_on()
+    # placeBulb.turn_on()
 
 # Funtion Turn off the light
 def turn_off_light(location):
     if location == "거실":
-        placeBulb = livingRoomBulb
+        livingRoomBulb.turn_off()
     elif location == "침실":
-        placeBulb = bedRoomBulb
+        bedRoomBulb.turn_off()
         
-    placeBulb.turn_off()
+    # placeBulb.turn_off()
 
 # # Function set color of light
 # def setRGB_light(location, r,g,b):
@@ -67,7 +67,7 @@ def turn_off_light(location):
 
 
 client = OpenAI(
-  api_key='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'  # this is also the default, it can be omitted
+  api_key='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'  # this is also the default, it can be omitted
 )
 
 tools = [

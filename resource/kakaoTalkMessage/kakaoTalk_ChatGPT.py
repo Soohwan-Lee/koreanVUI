@@ -23,38 +23,53 @@ from yeelight import Bulb
 # baud_rate = 9600
 # ser = serial.Serial(serial_port, baud_rate)
 
+# 카카오 API 엑세스 토큰
+with open("./resource/kakaoTalkMessage/kakao_code_friend.json", "r") as fp:
+    tokens = json.load(fp)    
+print(tokens["access_token"])
+
+
+# 친구 목록 가져오기
+url = "https://kapi.kakao.com/v1/api/talk/friends" #친구 목록 가져오기
+header = {"Authorization": 'Bearer ' + tokens["access_token"]}
+result = json.loads(requests.get(url, headers=header).text)
+friends_list = result.get("elements")
+print(friends_list)
+
+# 친구 목록 중 0번째 리스트의 친구 'uuid'
+friend_id = friends_list[0].get("uuid")
+print(friend_id)
+
+# 카카오톡 메시지 보내기
+def send_message():
+    url= "https://kapi.kakao.com/v1/api/talk/friends/message/default/send"
+    header = {"Authorization": 'Bearer ' + tokens["access_token"]}
+    data={
+        'receiver_uuids': '["{}"]'.format(friend_id),
+        "template_object": json.dumps({
+            "object_type":"text",
+            "text":"[LEMMY Test] 응급상황 발생!",
+            "link":{
+                "web_url" : "https://expc.unist.ac.kr",
+                "mobile_web_url" : "https://expc.unist.ac.kr"
+            },
+            "button_title": "119 호출하기"
+        })
+    }
+    response = requests.post(url, headers=header, data=data)
+    response.status_code
+
 # speech Recognition
 RATE = 44100
 CHUNK = int(RATE / 10)
 BUFF = CHUNK * 10
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
-DEVICE = 1
+DEVICE = 0
 
 # Set File Path
-file_path = './resource/controlIoT/'
+file_path = './resource/kakaoTalkMessage/'
 
-# Bulbs List (EXPC_Lab WIFI)
-livingRoomBulb = Bulb("192.168.0.17")
-bedRoomBulb = Bulb("192.168.0.18")
-
-# Function Turn on the light
-def turn_on_light(location):
-    if location == "거실":
-        placeBulb = livingRoomBulb
-    elif location == "침실":
-        placeBulb = bedRoomBulb
-
-    placeBulb.turn_on()
-
-# Funtion Turn off the light
-def turn_off_light(location):
-    if location == "거실":
-        placeBulb = livingRoomBulb
-    elif location == "침실":
-        placeBulb = bedRoomBulb
-        
-    placeBulb.turn_off()
 
 # # Function set color of light
 # def setRGB_light(location, r,g,b):
@@ -67,44 +82,28 @@ def turn_off_light(location):
 
 
 client = OpenAI(
-  api_key='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'  # this is also the default, it can be omitted
+  api_key='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'  # this is also the default, it can be omitted
 )
 
 tools = [
   {
     "type": "function",
     "function": {
-      "name": "turn_on_light",
-      "description": "방 이름을 입력해서 그곳의 불 켜기",
+      "name": "send_message",
+      "description": "응급 상황이라고 판단될 경우, 메시지를 보내기",
       "parameters": {
-        "type": "object",
-        "properties": {
-          "location": {
-            "type": "string",
-            "description": "방 이름, 예를 들면 침실, 거실",
-          },
-        },
-        "required": ["location"],
-      },
-    },
-  },
-  {
-    "type": "function",
-    "function": {
-      "name": "turn_off_light",
-      "description": "방 이름을 입력해서 그곳의 불 끄기",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "location": {
-            "type": "string",
-            "description": "방 이름, 예를 들면 침실, 거실",
-          },
-        },
-        "required": ["location"],
+        # "type": "object",
+        # "properties": {
+        #   "location": {
+        #     "type": "string",
+        #     "description": "방 이름, 예를 들면 침실, 거실",
+        #   },
+        # },
+        # "required": ["location"],
       },
     },
   }
+  
     # {
   #   "type": "function",
   #   "function": {
@@ -141,7 +140,7 @@ def run_conversation(user_query):
     messages = [{"role": "user", "content": user_query}] 
 
     completion = client.chat.completions.create(
-    model="gpt-4-1106-preview",
+    model="gpt-3.5-turbo",
     messages=messages,
     tools=tools,
     tool_choice="auto"
@@ -151,7 +150,7 @@ def run_conversation(user_query):
 
     if completion_reponse.tool_calls: # 응답이 함수 호출인지 확인하기
         # 호출할 함수 이름을 지정 
-        available_functions = {"turn_on_light": turn_on_light, "turn_off_light": turn_off_light}
+        available_functions = {"send_message": send_message}
 
         # 함수 이름 추출
         # print(completion_reponse)
@@ -161,12 +160,13 @@ def run_conversation(user_query):
 
             
             # 호출할 함수 선택
-            fuction_to_call = available_functions[function_name]
+            function_to_call = available_functions[function_name]
 
             # 함수 호출 및 반환 결과 받기
-            fuction_to_call(
-                location=json.loads(tool_call.function.arguments).get('location')
-            )
+            function_to_call()
+            # function_to_call(
+            #     location=json.loads(tool_call.function.arguments).get('location')
+            # )
         # print(completion_reponse.tool_calls[0].function.name)
 
 def speech_recognition():
