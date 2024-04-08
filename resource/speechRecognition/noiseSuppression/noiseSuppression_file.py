@@ -18,7 +18,7 @@ from pvkoala import create, KoalaActivationLimitError
 PROGRESS_BAR_LENGTH = 30
 
 
-def main():
+def noiseSuppression():
     # parser = argparse.ArgumentParser()
     # parser.add_argument(
     #     '--access_key',
@@ -50,9 +50,9 @@ def main():
     #     raise ValueError('This demo cannot overwrite its input path')
     
     # 임의로 지정
-    args_access_key = '9x0FaA466xUKn2jZkaAgAakVVBOG7RV6CFf/jI7rCpHJ3NB0HJ3V1w=='
-    args_input_path = './resource/speechRecognition/noiseSuppression/testSample.wav'
-    args_output_path = './resource/speechRecognition/noiseSuppression/testSample_withoutNoise.wav'
+    access_key = '9x0FaA466xUKn2jZkaAgAakVVBOG7RV6CFf/jI7rCpHJ3NB0HJ3V1w=='
+    input_path = './resource/speechRecognition/noiseSuppression/testSample.wav'
+    output_path = './resource/speechRecognition/noiseSuppression/testSample_withoutNoise.wav'
 
     # args.access_key = '9x0FaA466xUKn2jZkaAgAakVVBOG7RV6CFf/jI7rCpHJ3NB0HJ3V1w=='
     # args.input_path = './resource/speechRecognition/noiseSuppression/testSample.mp3'
@@ -60,7 +60,7 @@ def main():
 
 
     koala = create(
-        access_key=args_access_key)
+        access_key=access_key)
         # model_path=args.model_path,
         # library_path=args.library_path)
 
@@ -68,7 +68,7 @@ def main():
     try:
         print('Koala version: %s' % koala.version)
 
-        with wave.open(args_input_path, 'rb') as input_file:
+        with wave.open(input_path, 'rb') as input_file:
             if input_file.getframerate() != koala.sample_rate:
                 raise ValueError('Invalid sample rate of `%d`. Koala only accepts `%d`' % (
                     input_file.getframerate(),
@@ -79,7 +79,7 @@ def main():
                 raise ValueError('This demo can only process WAV files with 16-bit PCM encoding')
             input_length = input_file.getnframes()
 
-            with wave.open(args_output_path, 'wb') as output_file:
+            with wave.open(output_path, 'wb') as output_file:
                 output_file.setnchannels(1)
                 output_file.setsampwidth(2)
                 output_file.setframerate(koala.sample_rate)
@@ -107,13 +107,13 @@ def main():
                     start_sample = end_sample
                     progress = start_sample / (input_length + koala.delay_sample)
                     bar_length = int(progress * PROGRESS_BAR_LENGTH)
-                    print(
-                        '\r[%3d%%]|%s%s|' % (
-                            progress * 100,
-                            '#' * bar_length,
-                            ' ' * (PROGRESS_BAR_LENGTH - bar_length)),
-                        end='',
-                        flush=True)
+                    # print(
+                    #     '\r[%3d%%]|%s%s|' % (
+                    #         progress * 100,
+                    #         '#' * bar_length,
+                    #         ' ' * (PROGRESS_BAR_LENGTH - bar_length)),
+                    #     end='',
+                    #     flush=True)
 
                 print()
 
@@ -123,10 +123,10 @@ def main():
         print('AccessKey has reached its processing limit')
     finally:
         if length_sec > 0:
-            print('%.2f seconds of audio have been written to %s.' % (length_sec, args_output_path))
+            print('%.2f seconds of audio have been written to %s.' % (length_sec, output_path))
 
         koala.delete()
 
 
 if __name__ == '__main__':
-    main()
+    noiseSuppression()
