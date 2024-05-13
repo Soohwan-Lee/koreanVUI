@@ -1,8 +1,3 @@
-#########################################################
-## THIS DEMO WAS NOT TESTED YET!!!                     ##
-## LEMMY TEAM SHOULD TEST BEFORE USE THIS RESOURCE!!!  ##
-#########################################################
-
 #
 #    Copyright 2023 Picovoice Inc.
 #
@@ -27,7 +22,7 @@ VU_DYNAMIC_RANGE_DB = 50.0
 VU_MAX_BAR_LENGTH = 30
 
 
-def main():
+def noise_suppression():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--access_key',
@@ -48,27 +43,32 @@ def main():
     parser.add_argument('--show_audio_devices', action='store_true', help='Only list available devices and exit')
     args = parser.parse_args()
 
-    if args.show_audio_devices:
-        for index, name in enumerate(PvRecorder.get_available_devices()):
-            print('Device #%d: %s' % (index, name))
-        return
+    # if args.show_audio_devices:
+    #     for index, name in enumerate(PvRecorder.get_available_devices()):
+    #         print('Device #%d: %s' % (index, name))
+    #     return
 
-    if args.access_key is None:
-        raise ValueError('Missing required argument --access_key')
+    # if args.access_key is None:
+    #     raise ValueError('Missing required argument --access_key')
 
-    if args.output_path is None:
-        raise ValueError('Missing required argument --output_path')
+    # if args.output_path is None:
+    #     raise ValueError('Missing required argument --output_path')
 
-    if not args.output_path.lower().endswith('.wav'):
-        raise ValueError('Given argument --output_path must have WAV file extension')
+    # if not args.output_path.lower().endswith('.wav'):
+    #     raise ValueError('Given argument --output_path must have WAV file extension')
 
-    if args.reference_output_path is not None and not args.reference_output_path.lower().endswith('.wav'):
-        raise ValueError('Given argument --reference_output_path must have WAV file extension')
+    # if args.reference_output_path is not None and not args.reference_output_path.lower().endswith('.wav'):
+    #     raise ValueError('Given argument --reference_output_path must have WAV file extension')
+    
+    # 임의로 지정
+    args.access_key = '9x0FaA466xUKn2jZkaAgAakVVBOG7RV6CFf/jI7rCpHJ3NB0HJ3V1w=='
+    args.reference_output_path = './resource/speechRecognition/noiseSuppression/testSample.wav'
+    args.output_path = './resource/speechRecognition/noiseSuppression/testSample_withoutNoise.wav'
 
     koala = create(
         access_key=args.access_key,
-        model_path=args.model_path,
-        library_path=args.library_path)
+        model_path=args.model_path)
+        # library_path=args.library_path)
 
     length_sec = 0.0
     try:
@@ -129,4 +129,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    noise_suppression()
