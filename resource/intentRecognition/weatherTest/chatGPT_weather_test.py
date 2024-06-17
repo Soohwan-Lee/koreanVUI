@@ -7,7 +7,7 @@ import os
 import time
 
 # API 키 설정
-openai.api_key = "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"
+openai.api_key = "YOUR-API-KEY"
 
 def get_current_weather(location, unit="섭씨"):
     

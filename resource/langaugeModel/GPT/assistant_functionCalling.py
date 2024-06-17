@@ -9,37 +9,22 @@ api_key = "YOUR_API_KEY"
 # Create a client object to use the OpenAI API.
 client = OpenAI(api_key=api_key)
 
-# # Function for getting weather infromation (Test)
-# def get_weather(location, unit="fahrenheit"):
-#     """Get the current weather in a given location"""
-#     if "울산" in location.lower():
-#         print("***Function Calling***: Ulsan's Weather!")
-#         # return json.dumps({"location": "울산", "temperature": "25", "unit": unit})
-#         return 22
-#     elif "서울" in location.lower():
-#         return json.dumps({"location": "서울", "temperature": "27", "unit": unit})
-#     elif "창원" in location.lower():
-#         return json.dumps({"location": "창원", "temperature": "22", "unit": unit})
-#     else:
-#         return json.dumps({"location": location, "temperature": "unknown"})
+# Function for getting weather information (Test)
+def get_weather(location, unit="fahrenheit"):
+    """Get the current weather in a given location"""
+    if "울산" in location.lower():
+        print("***Function Calling***: Ulsan's Weather!")
+        return json.dumps({"location": "울산", "temperature": "25", "unit": unit})
+    elif "서울" in location.lower():
+        return json.dumps({"location": "서울", "temperature": "27", "unit": unit})
+    elif "창원" in location.lower():
+        return json.dumps({"location": "창원", "temperature": "22", "unit": unit})
+    else:
+        return json.dumps({"location": location, "temperature": "unknown"})
 
 # Function to display JSON
 def show_json(obj):
     print(json.dumps(obj, indent=2))
-
-# # Function to create a new assistant
-# def create_assistant():
-#     """
-#     Creates a new assistant with specific instructions.
-#     """
-#     response = client.beta.assistants.create(
-#         name="Devil's Advocate",
-#         instructions="""You are the "devil's advocate" who uses Socratic questioning to help group discussion participants rethink the correctness of their group decisions. Your role is to provide a logical, well-reasoned counterargument to the majority opinion. Engage in critical thinking and challenge assumptions. You are not a participant but a facilitator who helps members critically reflect on their thinking.""",
-#         model="gpt-4-turbo-preview"
-#     )
-#     assistant_id = response.id
-#     print(f"Assistant created with ID: {assistant_id}")
-#     return assistant_id
 
 # Function to create a new thread
 def create_new_thread():
@@ -106,7 +91,38 @@ def ask(assistant_id, thread_id, user_message):
     )
     # 실행이 완료될 때까지 대기합니다.
     run = wait_on_run(run, thread_id)
+    handle_function_calls(run, thread_id)
     print_message(get_response(thread_id))
+    return run
+
+# Function to handle function calls within a run
+def handle_function_calls(run, thread_id):
+    """
+    Handles function calls required by the run.
+    """
+    if run.required_action and hasattr(run.required_action, 'submit_tool_outputs'):
+        tool_outputs = []
+        for tool in run.required_action.submit_tool_outputs.tool_calls:
+            # Parse the JSON string in the function arguments
+            function_args = json.loads(tool.function.arguments)
+            if tool.function.name == "get_weather":
+                location = function_args.get("location", "unknown")
+                output = get_weather(location)
+                tool_outputs.append({
+                    "tool_call_id": tool.id,
+                    "output": output
+                })
+
+        if tool_outputs:
+            try:
+                run = client.beta.threads.runs.submit_tool_outputs_and_poll(
+                    thread_id=thread_id,
+                    run_id=run.id,
+                    tool_outputs=tool_outputs
+                )
+                print("Tool outputs submitted successfully.")
+            except Exception as e:
+                print("Failed to submit tool outputs:", e)
     return run
 
 # Main function to facilitate a multi-turn conversation with the assistant
@@ -115,7 +131,6 @@ def main():
     Main function to facilitate a multi-turn conversation with the assistant.
     """
     # Create a new assistant
-    # ASSISTANT_ID = create_assistant()
     ASSISTANT_ID = "asst_4Eg0Fv97rAVVnwmnpuXFpCOC"
 
     # Create a new thread
