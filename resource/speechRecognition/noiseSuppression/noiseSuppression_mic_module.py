@@ -4,7 +4,7 @@ from pvkoala import create
 from pvrecorder import PvRecorder
 
 # Settings
-access_key = '9x0FaA466xUKn2jZkaAgAakVVBOG7RV6CFf/jI7rCpHJ3NB0HJ3V1w=='  # Replace with your actual Picovoice access key
+access_key = 'YOUR_API_KEY'  # Replace with your actual Picovoice access key
 output_path = './resource/speechRecognition/noiseSuppression/testSample_withoutNoise.wav'  # Path where the output will be saved
 
 def noise_suppression():
