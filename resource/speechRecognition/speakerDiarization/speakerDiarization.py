@@ -73,7 +73,7 @@ def main():
         help='Audio device index to use from --show_audio_devices')
     args = parser.parse_args()
 
-    args.access_key = "9x0FaA466xUKn2jZkaAgAakVVBOG7RV6CFf/jI7rCpHJ3NB0HJ3V1w=="
+    args.access_key = "YOUR_API_KEY"
 
     if args.show_audio_devices:
         for index, name in enumerate(PvRecorder.get_available_devices()):
