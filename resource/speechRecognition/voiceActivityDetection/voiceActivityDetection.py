@@ -140,7 +140,7 @@ def main():
 
     args = parser.parse_args()
 
-    args.access_key = '9x0FaA466xUKn2jZkaAgAakVVBOG7RV6CFf/jI7rCpHJ3NB0HJ3V1w=='
+    args.access_key = 'YOUR_API_KEY'
     args.output_path = './resource/speechRecognition/voiceActivityDetection/audio.wav'
     args.audio_device_index = 0
 
