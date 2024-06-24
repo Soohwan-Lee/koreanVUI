@@ -99,7 +99,7 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    args.access_key = "XXUvGxv7PzDuGuvFs0yLXUx9uZv3iiTHbawKW1E46Sh04pgwzzM1jA=="
+    args.access_key = "YOUR_API_KEY"
     args.model_path = "./resource/langaugeModel/picoLLM/llama-3-8b-instruct-326.pllm"
     args.system_instruction = "You are social robot Lemmy. Keep your response short and consice. You were created at Ulsan Institute of Science and Technology."
     args.temperature = 0.8

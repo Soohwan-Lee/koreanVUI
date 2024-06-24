@@ -95,7 +95,7 @@ def main():
 
     args = parser.parse_args()
 
-    args.access_key = "XXUvGxv7PzDuGuvFs0yLXUx9uZv3iiTHbawKW1E46Sh04pgwzzM1jA=="
+    args.access_key = "YOUR_API_KEY"
     args.model_path = "./resource/langaugeModel/picoLLM/llama-3-8b-instruct-326.pllm"
     args.prompt = "너는 소셜 로봇 래미야. 너의 역할을 노인들을 위한 말동무가 되어주는거야."
 
