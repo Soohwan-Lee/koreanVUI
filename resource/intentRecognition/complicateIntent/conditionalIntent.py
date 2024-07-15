@@ -1,7 +1,8 @@
 from openai import OpenAI
 import json
 
-client = OpenAI(api_key="YOUR_API_KEYS")
+# YOUR_API_KEYS
+client = OpenAI(api_key="YOUR_API_KEY")
 
 # Example dummy function hard coded to return the same weather
 def get_current_weather(location, unit="celsius"):
@@ -68,6 +69,9 @@ def run_conversation():
             temperature=0.8
         )
 
+        print("CheckPoint 1: ")
+        print(response)
+
         response_message = response.choices[0].message
         tool_calls = response_message.tool_calls
 
@@ -94,9 +98,14 @@ def run_conversation():
                     "name": function_name,
                     "content": function_response,
                 })
+                print(f"CheckPoint 2: ")
+                print(messages)
+
 
         else:
             # If there are no more function calls, we're done
+            print(f"CheckPoint 3: ")
+            print(messages)
             messages.append(response_message)
             break
 
