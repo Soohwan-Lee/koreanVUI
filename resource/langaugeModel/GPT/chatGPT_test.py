@@ -8,6 +8,9 @@ def text_generate_GPT(messages):
     temperature=0.8
   )
 
+  print(completion)
+  test = completion.choices[0].message
+  print(test.content)
   bot_response = completion.choices[0].message.content
   messages.append({"role" : "assistant", "content" : f"{bot_response}"})
   print(f'LEMMY: {bot_response}')
