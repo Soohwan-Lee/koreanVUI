@@ -13,7 +13,7 @@ import whisper
 
 ### Define hard-coded values here
 # Variables for Wake-up word Recognition
-access_key = '9x0FaA466xUKn2jZkaAgAakVVBOG7RV6CFf/jI7rCpHJ3NB0HJ3V1w=='
+access_key = 'YOUR_API_KEY'
 model_path = './resource/speechRecognition/speechRecognitionModule/porcupine_params_ko.pv'
 keyword_paths = ['./resource/speechRecognition/speechRecognitionModule/lemmyWakeUp_Mac.ppn']
 audio_device_index = -1  # Default audio device
