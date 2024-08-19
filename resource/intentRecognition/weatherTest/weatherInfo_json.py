@@ -21,7 +21,7 @@ def get_weather_info(city, apikey, lang="en", units="metric"):
 
     return weather_info
 
-def save_weather_info(weather_info, filename="weather_info.json"):
+def save_weather_info(weather_info, filename="./resource/intentRecognition/complicateIntent/weather_info.json"):
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(weather_info, f, ensure_ascii=False, indent=4)
 

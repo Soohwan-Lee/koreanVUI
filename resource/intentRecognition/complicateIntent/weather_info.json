@@ -1,0 +1,10 @@
+{
+    "location": "Ulsan",
+    "weather": "튼구름",
+    "temperature": {
+        "current": 23.89,
+        "feels_like": 24.74,
+        "min": 23.89,
+        "max": 23.89
+    }
+}
