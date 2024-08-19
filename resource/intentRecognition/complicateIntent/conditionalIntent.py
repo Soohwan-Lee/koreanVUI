@@ -2,7 +2,7 @@ from openai import OpenAI
 import json
 
 # YOUR_API_KEYS
-client = OpenAI(api_key="YOUR_API_KEY")
+client = OpenAI(api_key="YOUR_API_KEYS")
 
 # Example dummy function hard coded to return the same weather
 def get_current_weather(location, unit="celsius"):
