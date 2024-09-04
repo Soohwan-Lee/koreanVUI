@@ -3,7 +3,7 @@ import json
 import time
 from openai import OpenAI
 
-# Initialize OpenAI client
+# Initialize OpenAI client YOUR_API_KEY
 client = OpenAI(api_key="YOUR_API_KEY")
 
 def get_weather_info(city, apikey, lang="en", units="metric"):
@@ -306,11 +306,6 @@ if __name__ == "__main__":
 
 # if __name__ == "__main__":
 #     main()
-
-
-
-
-
 
 
 
