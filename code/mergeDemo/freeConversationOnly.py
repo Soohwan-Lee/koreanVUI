@@ -240,7 +240,7 @@ def main():
                         messages.append({"role": "user", "content": "Please end the conversation and say something nice."})
                         
                         final_response = client.chat.completions.create(
-                            model="gpt-4",
+                            model="gpt-4o",
                             messages=messages,
                         )
                         final_message = final_response.choices[0].message.content
